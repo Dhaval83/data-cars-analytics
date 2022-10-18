@@ -1,0 +1,2 @@
+D:\flask-app
+flask --app hello run
