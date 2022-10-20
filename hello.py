@@ -61,6 +61,22 @@ def displaypiechart():
    #image1 = os.path.join(app.config['UPLOAD_FOLDER'], 'plot.png')
    return render_template("display-piechart.html",user_image = image1)
 
+@app.route('/display-barchart')
+def displaybarchart():
+   fig = Figure()
+   ax = fig.add_subplot(1, 1, 1)
+   x = [1, 2, 3, 4]
+   labels = ["Hyundai", "Kia", "Maruti", "Toyota"]
+   sizes = [280, 400, 350, 220]
+   ax.bar(labels,sizes)
+   output = io.BytesIO()
+   FigureCanvas(fig).print_png(output)
+   image2 = os.path.join(app.config['UPLOAD_FOLDER'], 'barchart.png')
+   fig.savefig(image2, dpi=500, bbox_inches='tight')
+   #return Response(output.getvalue(), mimetype='image/png')
+   #image1 = os.path.join(app.config['UPLOAD_FOLDER'], 'plot.png')
+   return render_template("display-barchart.html",user_image2 = image2)
+
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('not-found.html'), 404
