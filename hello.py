@@ -1,3 +1,4 @@
+from tkinter import Y
 from flask import Flask
 from markupsafe import escape
 from flask import render_template
@@ -9,6 +10,8 @@ import numpy as np
 import matplotlib as plt
 from PIL import Image, ImageDraw
 import os
+from scipy import stats
+import matplotlib.pyplot as plt
 
 
 IMAGES_FOLDER = os.path.join('static', 'images')
@@ -38,28 +41,25 @@ def aboutus():
 def contactus():
     return render_template('contactus.html')
 
-@app.route('/display-graph')
-def displaygraph():
+@app.route('/display-piechart')
+def displaypiechart():
    fig = Figure()
    ax = fig.add_subplot(1, 1, 1)
    x = [1, 2, 3, 4]
-   labels = 'Audi', 'Kia', 'Maruti', 'BMW'
-   sizes = [15, 30, 45, 10]
-   explode = (0, 0, 0, 0)  # only "explode" the 2nd slice (i.e. 'Hogs')
+   labels = 'Hyundai', 'Kia', 'Maruti', 'Toyota'
+   sizes = [28, 22, 35, 15]
+   explode = (0, 0, 0, 0)  
    
    ax.pie(sizes, explode=explode, labels=labels, autopct='%1d%%',
          startangle=90)
    ax.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
    output = io.BytesIO()
    FigureCanvas(fig).print_png(output)
-   image1 = os.path.join(app.config['UPLOAD_FOLDER'], 'plot.png')
+   image1 = os.path.join(app.config['UPLOAD_FOLDER'], 'piechart.png')
    fig.savefig(image1, dpi=500, bbox_inches='tight')
    #return Response(output.getvalue(), mimetype='image/png')
    #image1 = os.path.join(app.config['UPLOAD_FOLDER'], 'plot.png')
-   return render_template("display-graph.html",user_image = image1)
-
-
-   
+   return render_template("display-piechart.html",user_image = image1)
 
 @app.errorhandler(404)
 def page_not_found(e):
