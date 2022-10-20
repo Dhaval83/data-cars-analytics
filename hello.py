@@ -77,6 +77,28 @@ def displaybarchart():
    #image1 = os.path.join(app.config['UPLOAD_FOLDER'], 'plot.png')
    return render_template("display-barchart.html",user_image2 = image2)
 
+@app.route('/display-linearregression')
+def displaylinearregression():
+   fig = Figure()
+   ax = fig.add_subplot(1, 1, 1)
+   x = [1, 2, 3, 4]
+   labels = ["Hyundai", "Kia", "Maruti", "Toyota"]
+   x = [2, 4, 3, 1]
+   sizes = [280, 400, 350, 220]
+   slope, intercept, r, p, std_err = stats.linregress(x, sizes)
+   def myfunc(x):
+      return slope * x + intercept
+   mymodel = list(map(myfunc, x))
+   ax.scatter(labels, sizes)
+   ax.plot(labels, sizes)
+   
+   output = io.BytesIO()
+   FigureCanvas(fig).print_png(output)
+   image3 = os.path.join(app.config['UPLOAD_FOLDER'], 'linearregression.png')
+   fig.savefig(image3, dpi=500, bbox_inches='tight')
+   return render_template("display-linearregression.html",user_image3 = image3)
+
+
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template('not-found.html'), 404
